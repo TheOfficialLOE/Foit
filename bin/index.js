@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+
 import { Command, Option, Argument } from "commander";
 const program = new Command();
 
-program.name("foid");
+program.name("foit");
 
 program
     .command("shadow")
