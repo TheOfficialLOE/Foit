@@ -15,4 +15,4 @@ Here is the `shadow` command:
 * default value for `color` is black. Red, green, and also HEX colors are also supported.
 * `-s` determines size of the shadow, valid options are `small` and `large`.
 <br/>
-For instance: `foit shadow index h1 ABC -s large`.
+For instance: foit shadow index h1 ABC -s large
