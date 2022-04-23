@@ -1,4 +1,6 @@
 import { promises as fs } from "fs";
+import isElement from "../util/is-element.js";
+import colorPref from "../util/color-settings.js";
 
 export default async (path, element, color, options) => {
 
@@ -6,12 +8,25 @@ export default async (path, element, color, options) => {
 
     const data = (await file.readFile()).toString();
 
-    const starting = data.search(element);
-    const ending = data.indexOf("}", starting);
+    // if the element isn't already specified
+    // todo: make sure that it isn't defined as a comment
+    if (data.search(element) === -1) {
 
-    await file.write(`\tbackground-color:${color}\r\n}`, ending);
+        if (!isElement(element))
+            element = "." + element;
+
+        color = colorPref(color, options.size);
+
+        await file.appendFile(`${element} {\r\n\tbox-shadow: 0 1px 8px ${color};\r\n}`)
+
+        console.log("Shadow added to " + element)
+
+    }
+    // if the element is already defined
+    else {
+
+    }
 
     await file.close();
 
-    console.log(path, element,color, options);
 };

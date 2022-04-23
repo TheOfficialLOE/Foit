@@ -11,8 +11,10 @@ program
     .argument("<path>", "Path to CSS file")
     .argument("<element>", "Target element")
     .addArgument(new Argument("<color>", "Shadow color").argOptional().default("black"))
-    .addOption(new Option("-s, --size <type>", "Type of the shadow").choices(["little", "big"]).default("little"))
+    .addOption(new Option("-s, --size <type>", "Type of the shadow").choices(["small", "large"]).default("small"))
     .action(shadow);
+
+// Example: foit shadow index h1
 
 
 await program.parseAsync(process.argv);
