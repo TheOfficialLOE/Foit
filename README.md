@@ -24,5 +24,5 @@ default value for `color` is black. Red, green, and also HEX colors are also sup
 For instance: `foit shadow index h1 ABC -s large`.
 <br/>
 <br/>
-###Important 
+### Important 
 Foit uses a custom implementation of [jotform-css.js](https://github.com/jotform/css.js) (thanks for your great library) under the hood to manage css tree. So far, it's almost a copy of the library, but I'll improve it as much as I can. I also may want to overwrite it with TypeScript in the future.
