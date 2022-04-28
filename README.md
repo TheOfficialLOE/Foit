@@ -6,16 +6,24 @@ Foit is a CSS helper CLI. Using Foit you can add custom styles to your elements 
 Foit is still under development. So far, only the only feature is adding custom `box-shadow`.
 <br/>
 <br/>
-Here is the `shadow` command:
-<br/>
+
+##Commands
+###shadow
 `foit shadow file element color -s size`
 <br/>
-* `file` is name of the CSS file in your current dir.
-* `element` is name of the tag or class.
-* default value for `color` is black. Red, green, and also HEX colors are also supported.
-* `-s` determines size of the shadow, valid options are `small` and `large`.
 <br/>
-e.g `foit shadow index h1 ABC -s large`.
+`file` is name of the CSS file in your current dir.
+<br/>
+<br/>
+`element` is name of the tag or class.
+<br/>
+default value for `color` is black. Red, green, and also HEX colors are also supported.
+<br/>
+<br/>
+`-s` determines size of the shadow, valid options are `small` and `large`.
+<br/>
+<br/>
+For instance: `foit shadow index h1 ABC -s large`.
 <br/>
 <br/>
 ###Important 
