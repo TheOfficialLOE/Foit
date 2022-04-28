@@ -4,8 +4,6 @@ Foit is a CSS helper CLI. Using Foit you can add custom styles to your elements 
 <br/>
 <br/>
 Foit is still under development. So far, only the only feature is adding custom `box-shadow`.
-<br/>
-<br/>
 
 ##Commands
 ###shadow
