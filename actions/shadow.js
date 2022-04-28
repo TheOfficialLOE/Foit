@@ -1,52 +1,45 @@
-import { promises as fs } from "fs";
-import _ from "lodash";
+import * as fs from "fs";
+import parseCss from "../lib/parse-css.js";
 import isElement from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
 
 export default async (path, element, color, options) => {
-    const file = await fs.open(`./${path}.css`, "r+");
 
-    const data = (await file.readFile()).toString();
+    if (!element.startsWith(".") && !isElement(element))
+        element = "." + element;
 
     color = colorPref(color, options.size);
 
-    // if the element isn't already specified
-    // todo: make sure that it isn't defined as a comment
-    if (data.search(element) === -1) {
+    const fileStream = fs.createReadStream(`./${path}.css`);
 
-        if (!isElement(element))
-            element = "." + element;
+    fileStream.on("data", chunk => {
 
-        await file.appendFile(`${element} {\r\n\tbox-shadow: 0 1px 8px ${color};\r\n}`)
+        const tree = parseCss(chunk.toString());
+        let updated = "";
 
-        console.log("Shadow added to " + element)
+        tree.forEach(selection => {
 
-    }
-    // if the element is already defined
-    else {
+            let rules = "";
 
-        /* three cases are possible
-        * some styles applied and each have ; at the end
-        * some styles applied but the last one doesn't have a ;
-        * an empty block
-        * */
-
-        const starting = data.search(element);
-        let ending = data.indexOf("}", starting);
-
-        for (const index of _.range(ending, starting - 1)) {
-            if (data[index] === ";") {
-                ending = index;
-                break;
+            if (selection.selector === element) {
+                selection.rules.push({
+                   directive: "box-shadow",
+                   value:  `0 1px 8px ${color}`
+                });
             }
-        }
 
-        await file.write(`\r\n\tbox-shadow: 0 1px 8px ${color};\r\n}`, ending + 1);
+            selection.rules.forEach(rule => {
+                rules += "\t" + rule.directive + ": " + rule.value + ";\n"
+            });
 
-        console.log("Shadow added to " + element)
+            updated += selection.selector + " {\n" + rules + "}\n\n"
 
-    }
 
-    await file.close();
+        });
+
+        const writeStream = fs.createWriteStream(`./${path}.css`);
+        writeStream.write(updated);
+
+    });
 
 };
