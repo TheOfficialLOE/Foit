@@ -3,6 +3,7 @@ import parseCss from "../lib/parse-css.js";
 import stringify from "../lib/stringify.js";
 import isElement from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
+import shadowAction from "../util/stream-action.js";
 
 export default async (path, element, color, options) => {
 
@@ -16,38 +17,16 @@ export default async (path, element, color, options) => {
 
     const fileStream = fs.createReadStream(`./${path}`);
 
-    fileStream.on("data", chunk => {
-
-        const tree = parseCss(chunk.toString());
-        let nonFound = true;
-
-        tree.forEach(selection => {
-
-            if (selection.selector === element) {
-
-                selection.rules = selection.rules.filter(rule => {
-                    return rule.directive !== "box-shadow";
-                });
-
-                selection.rules.push({
-                    directive: "box-shadow",
-                    value: `0 1px 8px ${color}`
-                });
-                nonFound = false;
-            }
-
-        });
-
-        let updated = stringify(tree);
-
-        if (nonFound)
-            updated += `${element} ` + "{\n" + `\tbox-shadow: 0 1px 8px ${color}\n}\n`;
-
-        const writeStream = fs.createWriteStream(`./${path}`);
-        writeStream.write(updated);
-
-        console.log("Added shadow to " + path);
-
+    shadowAction(fileStream, {
+        path,
+        color,
+        element,
+        rule: {
+            directive: "box-shadow",
+            value: `0 1px 8px ${color}`
+        }
     });
+
+    console.log("Added shadow to " + path);
 
 };
