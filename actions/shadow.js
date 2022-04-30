@@ -1,9 +1,13 @@
 import * as fs from "fs";
-import parseCss from "../lib/parse-css.js";
-import stringify from "../lib/stringify.js";
 import isElement from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
 import shadowAction from "../util/stream-action.js";
+
+
+// todo: search by element
+/* bugs:
+*   can't detect texts that ain't rules
+* */
 
 export default async (path, element, color, options) => {
 

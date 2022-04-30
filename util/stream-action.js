@@ -14,8 +14,9 @@ export default (fileStream, data) => {
             if (selection.selector === data.element) {
 
                 selection.rules = selection.rules.filter(rule => {
-                    return rule.directive !== data.rule.directive;
+                    return rule.directive !== data.rule.directive || rule.type === "comment";
                 });
+
 
                 selection.rules.push({
                     directive: data.rule.directive,
