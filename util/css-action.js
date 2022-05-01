@@ -1,5 +1,6 @@
-import parseCss from "../lib/parse-css.js";
-import stringify from "../lib/stringify.js";
+// import parseCss from "../lib/parse-css.js";
+// import stringify from "../lib/stringify.js";
+import { parseCss, stringify } from "../lib/index.js";
 import * as fs from "fs";
 
 export default (fileStream, data) => {

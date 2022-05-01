@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import isElement from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
-import shadowAction from "../util/stream-action.js";
+import shadowAction from "../util/css-action.js";
 
 
 // todo: search by element
