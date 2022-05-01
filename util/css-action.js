@@ -12,7 +12,7 @@ export default (fileStream, data) => {
 
         tree.forEach(selection => {
 
-            if (selection.selector === data.element) {
+            if (selection.selector.includes(data.element) && Array.isArray(selection.rules)) {
 
                 selection.rules = selection.rules.filter(rule => {
                     return rule.directive !== data.rule.directive || rule.type === "comment";
@@ -32,6 +32,8 @@ export default (fileStream, data) => {
 
         if (nonFound)
             updated += `${data.element} ` + "{\n" + `\t${data.rule.directive}: ${data.rule.value}\n}`;
+
+        // console.log(updated);
 
         const writeStream = fs.createWriteStream(`./${data.path}`);
         writeStream.write(updated);
