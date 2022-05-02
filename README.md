@@ -25,4 +25,6 @@ For instance: `foit shadow index h1 ABC -s large`.
 <br/>
 <br/>
 ### Important 
-Foit uses a custom implementation of [jotform-css.js](https://github.com/jotform/css.js) (thanks for your great library) under the hood to manage css tree. The original library had bugs for css comment lines ,and I tried to fix them. I also may want to overwrite it with TypeScript in the future.
+~~Foit uses a custom implementation of [jotform-css.js](https://github.com/jotform/css.js) (thanks for your great library) under the hood to manage css tree. The original library had bugs for css comment lines ,and I tried to fix them. I also may want to overwrite it with TypeScript in the future.~~
+<br/>
+I'm breaking it.
