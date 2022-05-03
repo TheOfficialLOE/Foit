@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^9.2.0",
-    "jotform-css.js": "^1.0.1",
     "lodash": "^4.17.21",
     "mensch": "^0.3.4"
   }

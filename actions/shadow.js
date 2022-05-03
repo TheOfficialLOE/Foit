@@ -1,14 +1,7 @@
 import * as fs from "fs";
 import isElement from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
-import shadowAction from "../util/css-action.js";
-
 import mensch from "mensch";
-
-// todo: search by element
-/* bugs:
-*   can't detect texts that ain't rules
-* */
 
 export default async (path, element, color, options) => {
 
@@ -28,31 +21,40 @@ export default async (path, element, color, options) => {
             comments: true
         });
 
-        // console.log(ast.stylesheet.rules);
+        let foundSelector = false;
 
         ast.stylesheet.rules.some(rule => {
-            if (rule.type !== "comment") {
-                rule.selectors.forEach(selector => {
-                    if (selector === element) {
-
-                        const existing = rule.declarations.filter(
-                            declaration => declaration.type !== "comment" && declaration.name === "box-shadow"
-                        );
-
-                        if (existing && existing.length) {
-                            existing[0].value = color
-                        }
-                        else {
-                            rule.declarations.push({
-                                type: "property",
-                                name: "box-shadow",
-                                value: "red"
-                            })
-                        }
+            if (rule.type === "rule") {
+                if (rule.selectors.includes(element)) {
+                    const existingRule = rule.declarations.filter(
+                        declaration => declaration.type !== "comment" && declaration.name === "box-shadow"
+                    );
+                    if (existingRule && existingRule.length) {
+                        existingRule[0].value = color;
+                    } else {
+                        rule.declarations.push({
+                            type: 'property',
+                            name: 'box-shadow',
+                            value: color
+                        });
                     }
-                })
+                    foundSelector = true;
+                    return true
+                }
             }
         });
+
+        if (!foundSelector) {
+            ast.stylesheet.rules.push({
+                type: 'rule',
+                selectors: [element],
+                declarations: [{
+                    type: 'property',
+                    name: 'box-shadow',
+                    value: color
+                }]
+            });
+        }
 
         const css = mensch.stringify(ast, {
             comments: true,
@@ -64,18 +66,8 @@ export default async (path, element, color, options) => {
         writeStream.close();
         fileStream.close();
 
-    });
+        console.log("Added shadow to " + element);
 
-    // shadowAction(fileStream, {
-    //     path,
-    //     color,
-    //     element,
-    //     rule: {
-    //         directive: "box-shadow",
-    //         value: `0 1px 8px ${color}`
-    //     }
-    // });
-    //
-    // console.log("Added shadow to " + path);
+    });
 
 };
