@@ -1,25 +1,18 @@
 import * as fs from "fs";
-import isElement from "../util/is-element.js";
-import colorPref from "../util/color-settings.js";
+import inputConfig from "../util/input-config.js"
 import actionPerformer from "../util/action-performer.js";
 
 export default async (path, element, color, options) => {
 
-    if (!path.endsWith(".css"))
-        path += ".css";
+    const modified = inputConfig(path, element, color, options.size);
 
-    if (!element.startsWith(".") && !isElement(element))
-        element = "." + element;
-
-    color = colorPref(color, options.size);
-
-    const fileStream = fs.createReadStream(`./${path}`);
+    const fileStream = fs.createReadStream(`./${modified.path}`);
 
     actionPerformer(fileStream, {
         action: "box-shadow",
-        element,
-        value: color,
-        path
+        element: modified.element,
+        value: modified.color,
+        path: modified.path
     });
 
     console.log("Added shadow to " + element);
