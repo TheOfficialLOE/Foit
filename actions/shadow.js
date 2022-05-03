@@ -11,7 +11,7 @@ export default async (path, element, color, options) => {
     actionPerformer(fileStream, {
         action: "box-shadow",
         element: modified.element,
-        value: modified.color,
+        value: "0 2px 8px " + modified.color,
         path: modified.path
     });
 
