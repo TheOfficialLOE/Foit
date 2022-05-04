@@ -2,6 +2,7 @@
 
 import { Command, Option, Argument } from "commander";
 import shadow from "../actions/shadow.js";
+import border from "../actions/border.js";
 const program = new Command();
 
 program.name("foit");
@@ -25,9 +26,7 @@ program
     .addOption(new Option("-w, --width, <width>").default("12px"))
     .addOption(new Option("-s, --style, <style>").default("solid"))
     .addOption(new Option("-c, --color, <color>").default("black"))
-    .action(async (path, element, options) => {
-        console.log(path, element, options)
-    });
+    .action(border);
 
 
 await program.parseAsync(process.argv);
