@@ -15,6 +15,4 @@ export default async (path, element, options) => {
         path: modified.path
     });
 
-    console.log("Added shadow to " + element);
-
 };

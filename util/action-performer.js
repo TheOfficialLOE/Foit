@@ -3,6 +3,11 @@ import mensch from "mensch";
 
 const actionPerformer = (fileStream, data) => {
 
+    fileStream.on("error", error => {
+       if (error.code === "ENOENT")
+           console.log("Couldn't find the file.")
+    });
+
     fileStream.on("data", chunk => {
 
         const ast = mensch.parse(chunk.toString(), {
@@ -53,6 +58,8 @@ const actionPerformer = (fileStream, data) => {
         writeStream.write(css);
         writeStream.close();
         fileStream.close();
+
+        console.log("Successful!")
 
     });
 

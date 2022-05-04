@@ -32,6 +32,4 @@ export default async (path, element, options) => {
         value: width + " " + style + " " + color,
     });
 
-    console.log("Added " + position + " to " + element);
-
 };
