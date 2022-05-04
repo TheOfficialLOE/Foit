@@ -1,11 +1,12 @@
 import fs from "fs";
 import mensch from "mensch";
+import chalk from "chalk";
 
 const actionPerformer = (fileStream, data) => {
 
     fileStream.on("error", error => {
        if (error.code === "ENOENT")
-           console.log("Couldn't find the file.")
+           console.log(chalk.red("Couldn't find the file:("))
     });
 
     fileStream.on("data", chunk => {
@@ -59,7 +60,7 @@ const actionPerformer = (fileStream, data) => {
         writeStream.close();
         fileStream.close();
 
-        console.log("Successful!")
+        console.log(chalk.green("Successful!"));
 
     });
 
