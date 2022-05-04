@@ -14,7 +14,20 @@ program
     .addOption(new Option("-s, --size <type>", "Type of the shadow").choices(["small", "large"]).default("small"))
     .action(shadow);
 
-// Example: foit shadow index h1
+program
+    .command("border")
+    .argument("<path>", "Path to CSS file")
+    .argument("<element>", "Target element")
+    .addOption(
+        new Option("-p, --position, <position>", "Border position")
+            .choices(["full", "top", "right", "bottom", "left"])
+            .default("full"))
+    .addOption(new Option("-w, --width, <width>").default("12px"))
+    .addOption(new Option("-s, --style, <style>").default("solid"))
+    .addOption(new Option("-c, --color, <color>").default("black"))
+    .action(async (path, element, options) => {
+        console.log(path, element, options)
+    });
 
 
 await program.parseAsync(process.argv);
