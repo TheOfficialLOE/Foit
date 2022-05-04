@@ -26,9 +26,9 @@ For instance: `foit shadow index h1 -c ABC -s large`.
 Default value for `position` is `full`. Valid options are: `full`, `top`, `right`, `bottom`, `left`.
 <br/>
 <br/>
-`width` is width of the border, only `px` unit.
+`width` is width of the border, only `px` unit. Default value is `12px`.
 <br/>
 <br/>
-`style` of the border.
+`style` of the border. Default value is `solid`.
 <br/>
 <br/>
