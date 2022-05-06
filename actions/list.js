@@ -6,6 +6,8 @@ import fuzzy from "fuzzy";
 
 export default async (path) => {
 
+    inquirer.registerPrompt("autocomplete", inquirerPrompt);
+
     if (!path.endsWith(".css"))
         path += ".css";
 
@@ -21,30 +23,32 @@ export default async (path) => {
             .map(rule => rule.selectors && rule.selectors.join(""))
             .filter(selector => selector !== undefined);
 
+        inquirer
+            .prompt([
+                {
+                    type: "autocomplete",
+                    name: "selector",
+                    message: 'Choose your selector',
+                    source: (answers, input = "") => {
+                        return new Promise((resolve, reject) => {
+                            resolve(fuzzy.filter(input, selectors).map((el) => el.original));
+                        });
+                    }
+                },
+                {
+                    type: "checkbox",
+                    name: "action",
+                    message: "Choose your action",
+                    choices: [ "shadow", "border" ]
+                }
+            ])
+            .then(answer => {
+                console.log(answer)
+            })
+            .catch(err => {
+                lodash(err);
+            });
+
     });
 
 };
-
-// inquirer.registerPrompt("autocomplete", inquirerPrompt);
-
-// const foods = ['Apple', 'Orange', 'Banana', 'Kiwi', 'Lichi', 'Grapefruit'];
-
-// function searchFood(answers, input = '') {
-//     return new Promise((resolve) => {
-//         resolve(fuzzy.filter(input, foods).map((el) => el.original));
-//     });
-// }
-//
-// inquirer
-//     .prompt([{
-//         type: "autocomplete",
-//         name: "from",
-//         message: 'Select a state to travel from',
-//         source: searchFood
-//     }])
-//     .then(answers => {
-//         console.log(answers);
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     });
