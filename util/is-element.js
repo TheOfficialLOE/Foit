@@ -16,3 +16,5 @@ const elements = [
     "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track",
     "u", "ul", "var", "video"
 ];
+
+export { elements };

@@ -3,6 +3,9 @@ import mensch from "mensch";
 import inquirer from "inquirer";
 import inquirerPrompt from "inquirer-autocomplete-prompt";
 import fuzzy from "fuzzy";
+import {elements} from "../util/is-element.js";
+import colorPref from "../util/color-settings.js";
+import v2ActionPerformer from "../util/action-performer-v2.js";
 
 export default async (path) => {
 
@@ -13,17 +16,26 @@ export default async (path) => {
 
     const fileStream = fs.createReadStream(`./${path}`);
 
-    fileStream.on("data", chunk => {
+    fileStream.on("error", error => {
+        if (error.code === "ENOENT")
+            console.log("Couldn't find the file:(");
+    });
+
+    fileStream.on("data", async chunk => {
 
         const css = chunk.toString();
 
         const ast = mensch.parse(css, { comments: true });
 
-        const selectors = ast.stylesheet.rules
+        let selectors = ast.stylesheet.rules
             .map(rule => rule.selectors && rule.selectors.join(""))
             .filter(selector => selector !== undefined);
 
-        inquirer
+        selectors = selectors.concat(elements);
+
+        selectors = [...new Set(selectors)];
+
+        const prompt = await inquirer
             .prompt([
                 {
                     type: "autocomplete",
@@ -41,14 +53,126 @@ export default async (path) => {
                     message: "Choose your action",
                     choices: [ "shadow", "border" ]
                 }
-            ])
-            .then(answer => {
-                console.log(answer)
-            })
-            .catch(err => {
-                lodash(err);
-            });
+            ]);
+
+        const selector = prompt.selector;
+        let action = prompt.action;
+
+        if (action.length === 0) {
+            console.log("Please choose an action.")
+            return;
+        }
+
+        if (action.length === 2) {
+            console.log("Please choose only one action.")
+            return;
+        }
+
+        action = action.toString();
+
+        switch (action) {
+
+            case "shadow": {
+
+                const shadow = await inquirer.prompt([
+                    {
+                        name: "color",
+                        message: "Choose shadow color (default black)",
+                        default: "black"
+                    },
+                    {
+                        type: "checkbox",
+                        name: "size",
+                        message: "Choose shadow size",
+                        choices: [ "small", "large" ]
+                    }
+                ]);
+
+                const size = shadow.size;
+
+                if (size.length === 0) {
+                    console.log("Please choose a size.")
+                    return;
+                }
+
+                if (size.length === 2) {
+                    console.log("Please choose only one size.")
+                    return;
+                }
+
+                const color = "0 2px 8px " + colorPref(shadow.color, size.toString());
+
+                v2ActionPerformer(fileStream, {
+                    path,
+                    selector,
+                    ast,
+                    action: "box-shadow",
+                    value: color,
+                })
+
+                console.log("success!");
+
+                break;
+            }
+
+            case "border": {
+
+
+                const border = await inquirer.prompt([
+                    {
+                        type: "checkbox",
+                        name: "position",
+                        message: "Choose border position",
+                        choices: [ "full", "top", "right", "bottom", "left" ]
+                    },{
+                        name: "width",
+                        message: "Choose border width (default 12px)",
+                        default: "12px"
+                    },{
+                        name: "style",
+                        message: "Choose border style (default solid)",
+                        default: "solid"
+                    },{
+                        name: "color",
+                        message: "Choose border color (default black)",
+                        default: "black"
+                    }
+                ]);
+
+                let position = border.position;
+                const width = border.width.endsWith("px") ? border.width : border.width + "px";;
+                const style = border.style;
+                const color = colorPref(border.color, "large");
+
+                if (position.length === 0) {
+                    console.log("Please choose an action.")
+                    return;
+                }
+
+                if (position.length !== 1) {
+                    console.log("Please choose only one position.")
+                    return;
+                }
+
+                position = position.toString() === "full" ? "border" : `border-${position}`;
+
+                v2ActionPerformer(fileStream, {
+                    path,
+                    selector,
+                    ast,
+                    action: position,
+                    value: width + " " + style + " " + color
+                });
+
+                console.log("success!");
+
+                break;
+            }
+
+
+        }
 
     });
+
 
 };
