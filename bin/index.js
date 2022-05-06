@@ -3,9 +3,15 @@
 import { Command, Option, Argument } from "commander";
 import shadow from "../actions/shadow.js";
 import border from "../actions/border.js";
+import list from "../actions/list.js";
 const program = new Command();
 
 program.name("foit");
+
+program
+    .command("list")
+    .argument("<path>", "Path to CSS file")
+    .action(list)
 
 program
     .command("shadow")
