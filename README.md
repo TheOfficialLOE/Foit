@@ -9,4 +9,4 @@ Notice:
 * So far you can only choose to add a `box-shadow` or a `border`, I may not have time maintain this project anymore.
 * To choose a checkbox, you must press enter to select it.
 ## Screenshots
-[**Usage**](https://github.com/TheOfficialLOE/Foit/blob/main/screenshots/usage.gif)
+![**Usage**](https://github.com/TheOfficialLOE/Foit/blob/main/screenshots/usage.gif)
