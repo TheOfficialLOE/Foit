@@ -4,7 +4,7 @@
 
 Foit is a CSS helper CLI. Using Foit you can add custom styles to your elements or classes.
 ## Command line
-Using it is pretty simple, just provide the name of a CSS file in your current directory using `foit 'name'` and simple follow the questions.
+Using it is pretty simple, just provide the name of a CSS file in your current directory using `foit 'name'` and simply follow the questions.
 <br/>
 Notice:
 * Almost all valid HTML elements and detected selectors are included, you can choose whichever you desire.
