@@ -5,7 +5,7 @@ import inquirerPrompt from "inquirer-autocomplete-prompt";
 import fuzzy from "fuzzy";
 import {elements} from "../util/is-element.js";
 import colorPref from "../util/color-settings.js";
-import v2ActionPerformer from "../util/action-performer-v2.js";
+import actionPerformer from "../util/action-performer.js";
 
 export default async (path) => {
 
@@ -102,7 +102,7 @@ export default async (path) => {
 
                 const color = "0 2px 8px " + colorPref(shadow.color, size.toString());
 
-                v2ActionPerformer(fileStream, {
+                actionPerformer(fileStream, {
                     path,
                     selector,
                     ast,
@@ -140,7 +140,7 @@ export default async (path) => {
                 ]);
 
                 let position = border.position;
-                const width = border.width.endsWith("px") ? border.width : border.width + "px";;
+                const width = border.width.endsWith("px") ? border.width : border.width + "px";
                 const style = border.style;
                 const color = colorPref(border.color, "large");
 
@@ -156,7 +156,7 @@ export default async (path) => {
 
                 position = position.toString() === "full" ? "border" : `border-${position}`;
 
-                v2ActionPerformer(fileStream, {
+                actionPerformer(fileStream, {
                     path,
                     selector,
                     ast,
